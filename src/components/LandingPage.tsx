@@ -250,6 +250,13 @@ export default function LandingPage() {
       </section>
 
       <BigQuestion />
+
+      {/* Romantic Footer */}
+      <footer className="relative z-10 w-full text-center pb-8 pt-4 mt-8 opacity-70 hover:opacity-100 transition-opacity">
+        <p className="text-zinc-600 font-medium text-sm md:text-base flex items-center justify-center gap-2 flex-wrap px-4">
+          Crafted with endless <Heart size={16} className="text-[#FF1493] fill-[#FF1493] animate-pulse drop-shadow-sm" /> by <span className="font-bold text-[#4A90E2]">Oshada Rashmika</span> for his one and only Angel, <span className="font-bold text-[#FF1493]">Senuri Rukshani</span> 🌺🐾
+        </p>
+      </footer>
     </div>
   );
 }
