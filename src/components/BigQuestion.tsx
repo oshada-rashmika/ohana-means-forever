@@ -43,6 +43,33 @@ export default function BigQuestion() {
     }
   };
 
+  const sendNotification = async (answer: "YES" | "NO") => {
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+    if (!accessKey) return;
+
+    const message = answer === "YES" 
+      ? "She said YES! 🌺 Get ready for a lifetime of Ohana!" 
+      : "She double-confirmed NO... 💔 The Stitch is heartbroken.";
+
+    try {
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: accessKey,
+          subject: `Senuri's Answer: ${answer}!`,
+          message: message,
+          from_name: "Ohana Means Forever App"
+        }),
+      });
+    } catch (err) {
+      console.error("Failed to send notification", err);
+    }
+  };
+
   return (
     <section className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-32 pt-16">
       <motion.div
@@ -80,7 +107,10 @@ export default function BigQuestion() {
 
                 <div className="flex items-center gap-6 mt-8 relative w-full justify-center md:justify-start min-h-[60px]">
                   <button
-                    onClick={() => setStep("accepted")}
+                    onClick={() => {
+                      setStep("accepted");
+                      sendNotification("YES");
+                    }}
                     className="px-10 py-4 bg-gradient-to-r from-pink-500 to-[#FF1493] text-white font-bold text-xl rounded-full shadow-lg hover:shadow-pink-500/50 hover:scale-110 transition-all z-20"
                   >
                     YES! 🌺
@@ -124,7 +154,10 @@ export default function BigQuestion() {
                 
                 <div className="flex flex-wrap items-center gap-4 mt-8 relative w-full justify-center md:justify-start">
                   <button 
-                    onClick={() => setStep("heartbroken")}
+                    onClick={() => {
+                      setStep("heartbroken");
+                      sendNotification("NO");
+                    }}
                     className="px-8 py-4 bg-white text-zinc-400 font-bold text-lg rounded-full border-2 border-zinc-200 shadow-sm hover:bg-zinc-50 transition-colors"
                   >
                     Yes, I'm sure.
