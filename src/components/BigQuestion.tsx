@@ -4,9 +4,10 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toPng } from "html-to-image";
 
+type Step = "question" | "sad" | "heartbroken" | "accepted";
+
 export default function BigQuestion() {
-  const [accepted, setAccepted] = useState(false);
-  const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
+  const [step, setStep] = useState<Step>("question");
   const [isDownloading, setIsDownloading] = useState(false);
 
   const agreementRef = useRef<HTMLDivElement>(null);
@@ -16,13 +17,6 @@ export default function BigQuestion() {
     month: 'long',
     day: 'numeric'
   });
-
-  const handleNoHover = () => {
-    // move the No button away
-    const newX = Math.random() * 200 - 100; // -100 to 100
-    const newY = Math.random() * 150 - 75;
-    setNoPosition({ x: newX, y: newY });
-  };
 
   const handleDownload = async () => {
     if (!agreementRef.current) return;
@@ -58,48 +52,127 @@ export default function BigQuestion() {
         transition={{ duration: 0.8 }}
         className="bg-white/60 backdrop-blur-xl border border-pink-200 rounded-[3rem] p-8 md:p-12 shadow-[0_20px_50px_rgba(255,105,180,0.2)]"
       >
-        {!accepted ? (
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            {/* Left Side: GIF */}
-            <div className="w-full md:w-1/2 flex justify-center">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform -rotate-2 hover:rotate-0 transition-transform duration-500 max-w-sm">
-                <img src="/question.gif" alt="Please?" className="w-full h-auto object-cover" />
-                <div className="absolute inset-0 bg-pink-500/10 mix-blend-overlay pointer-events-none"></div>
+        <AnimatePresence mode="wait">
+          {step === "question" && (
+            <motion.div 
+              key="question"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="flex flex-col md:flex-row items-center gap-12"
+            >
+              {/* Left Side: GIF */}
+              <div className="w-full md:w-1/2 flex justify-center">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform -rotate-2 hover:rotate-0 transition-transform duration-500 max-w-sm">
+                  <img src="/question.gif" alt="Please?" className="w-full h-auto object-cover" />
+                  <div className="absolute inset-0 bg-pink-500/10 mix-blend-overlay pointer-events-none"></div>
+                </div>
               </div>
-            </div>
 
-            {/* Right Side: The Question */}
-            <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
-              <h2 className="text-4xl md:text-5xl font-extrabold text-[#FF1493] leading-tight" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}>
-                The Most Important Question 🥺
-              </h2>
-              <p className="text-xl text-zinc-700 font-medium leading-relaxed">
-                My Princess, you're the beautiful Angel to my Stitch, the melody to my heart, and my absolute favorite person in the world. Will you do me the honor of being my girlfriend?
-              </p>
+              {/* Right Side: The Question */}
+              <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-[#FF1493] leading-tight" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}>
+                  The Most Important Question 🥺
+                </h2>
+                <p className="text-xl text-zinc-700 font-medium leading-relaxed">
+                  My Princess, you're the beautiful Angel to my Stitch, the melody to my heart, and my absolute favorite person in the world. Will you do me the honor of being my girlfriend?
+                </p>
 
-              <div className="flex items-center gap-6 mt-8 relative w-full justify-center md:justify-start min-h-[60px]">
-                <button
-                  onClick={() => setAccepted(true)}
-                  className="px-10 py-4 bg-gradient-to-r from-pink-500 to-[#FF1493] text-white font-bold text-xl rounded-full shadow-lg hover:shadow-pink-500/50 hover:scale-110 transition-all z-20"
+                <div className="flex items-center gap-6 mt-8 relative w-full justify-center md:justify-start min-h-[60px]">
+                  <button
+                    onClick={() => setStep("accepted")}
+                    className="px-10 py-4 bg-gradient-to-r from-pink-500 to-[#FF1493] text-white font-bold text-xl rounded-full shadow-lg hover:shadow-pink-500/50 hover:scale-110 transition-all z-20"
+                  >
+                    YES! 🌺
+                  </button>
+
+                  <button
+                    onClick={() => setStep("sad")}
+                    className="px-10 py-4 bg-white text-zinc-400 font-bold text-xl rounded-full border-2 border-zinc-200 shadow-sm z-10 hover:bg-zinc-50 hover:text-zinc-600 transition-colors"
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {step === "sad" && (
+            <motion.div 
+              key="sad"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="flex flex-col md:flex-row items-center gap-12"
+            >
+              {/* Left Side: GIF */}
+              <div className="w-full md:w-1/2 flex justify-center">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform rotate-2 hover:rotate-0 transition-transform duration-500 max-w-sm">
+                  <img src="/hug.gif" alt="Sad Stitch" className="w-full h-auto object-cover" />
+                  <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay pointer-events-none"></div>
+                </div>
+              </div>
+              
+              {/* Right Side: The Sad Question */}
+              <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-[#4A90E2] leading-tight" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}>
+                  Are you sure...? 🥺
+                </h2>
+                <p className="text-xl text-zinc-600 font-medium leading-relaxed">
+                  But... 'Ohana means family. And family means nobody gets left behind or forgotten. My heart feels so broken. Are you really, really sure you want to say no to your Stitch? 💔
+                </p>
+                
+                <div className="flex flex-wrap items-center gap-4 mt-8 relative w-full justify-center md:justify-start">
+                  <button 
+                    onClick={() => setStep("heartbroken")}
+                    className="px-8 py-4 bg-white text-zinc-400 font-bold text-lg rounded-full border-2 border-zinc-200 shadow-sm hover:bg-zinc-50 transition-colors"
+                  >
+                    Yes, I'm sure.
+                  </button>
+                  
+                  <button 
+                    onClick={() => setStep("question")}
+                    className="px-8 py-4 bg-gradient-to-r from-[#4A90E2] to-blue-500 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-blue-500/50 hover:scale-105 transition-all"
+                  >
+                    No, I changed my mind! 💖
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {step === "heartbroken" && (
+            <motion.div 
+              key="heartbroken"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center text-center space-y-8 py-10"
+            >
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-zinc-300 max-w-sm">
+                <img src="/okay.gif" alt="Heartbroken Stitch" className="w-full h-auto object-cover grayscale opacity-80" />
+              </div>
+              
+              <div className="max-w-2xl">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-zinc-500 leading-tight mb-4" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}>
+                  Okay... I understand. 🌧️
+                </h2>
+                <p className="text-xl text-zinc-500 font-medium leading-relaxed">
+                  I guess some 'Ohanas just aren't meant to be. Stitch will just be alone... in the rain... with a broken heart. Goodbye, my Angel. 🥀
+                </p>
+                <button 
+                  onClick={() => setStep("question")}
+                  className="mt-10 px-8 py-4 bg-zinc-100 text-zinc-500 font-bold text-lg rounded-full border border-zinc-200 shadow-sm hover:bg-pink-50 hover:text-pink-500 hover:border-pink-200 transition-all"
                 >
-                  YES! 🌺
+                  Wait... I was just kidding! 🥺👉👈
                 </button>
-
-                <motion.button
-                  animate={{ x: noPosition.x, y: noPosition.y }}
-                  onHoverStart={handleNoHover}
-                  onClick={handleNoHover}
-                  className="px-10 py-4 bg-white text-zinc-400 font-bold text-xl rounded-full border-2 border-zinc-200 shadow-sm z-10"
-                >
-                  No
-                </motion.button>
               </div>
-            </div>
-          </div>
-        ) : (
-          /* The Love Agreement */
-          <AnimatePresence>
+            </motion.div>
+          )}
+
+          {step === "accepted" && (
             <motion.div
+              key="accepted"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ type: "spring", bounce: 0.3 }}
@@ -183,8 +256,8 @@ export default function BigQuestion() {
                 {isDownloading ? "Capturing... 📸" : "Download Our Agreement 📥"}
               </button>
             </motion.div>
-          </AnimatePresence>
-        )}
+          )}
+        </AnimatePresence>
       </motion.div>
     </section>
   );
