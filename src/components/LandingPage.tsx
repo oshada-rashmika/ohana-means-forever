@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Search, Heart } from "lucide-react";
 import FloatingAccents from "./FloatingAccents";
 
 export default function LandingPage() {
@@ -11,53 +12,166 @@ export default function LandingPage() {
     offset: ["start start", "end end"]
   });
 
-  const headerY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  
-  const cardY = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
-
   return (
-    <div ref={containerRef} className="relative min-h-[200vh] w-full bg-white text-zinc-800 font-sans">
+    <div
+      ref={containerRef}
+      className="relative min-h-screen w-full font-sans overflow-x-hidden selection:bg-pink-200 text-zinc-800"
+      style={{
+        background: "linear-gradient(135deg, #FFE4E1 0%, #FFF0F5 50%, #E6F3FF 100%)",
+      }}
+    >
+      {/* Subtle Noise Texture Overlay */}
+      <div className="absolute inset-0 opacity-[0.04] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/stardust.png")' }}></div>
+
       <FloatingAccents />
-      
-      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center p-6 overflow-hidden">
-        {/* Parallax Header */}
-        <motion.div 
-          style={{ y: headerY, opacity: headerOpacity }}
-          className="z-10 text-center mb-16"
+
+      {/* Navigation Bar */}
+      <nav className="relative z-20 w-full px-6 py-6 flex justify-between items-center max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-2xl md:text-3xl font-bold text-pink-500 drop-shadow-sm"
+          style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}
         >
-          <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-rose-400 to-fuchsia-500 pb-2 drop-shadow-sm" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}>
-            Aloha, My Favorite Person 🌺
-          </h1>
-          <p className="mt-4 text-xl text-pink-400 font-medium tracking-wide">
-            Welcome to our little world
-          </p>
+          Our Aloha Story 🌺
         </motion.div>
 
-        {/* Glassmorphism Card */}
         <motion.div
-          style={{ y: cardY }}
-          className="z-10 bg-white/80 backdrop-blur-md border border-pink-200 shadow-2xl rounded-3xl p-10 max-w-lg w-full text-center relative overflow-hidden"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="flex items-center gap-4 md:gap-6"
         >
-          {/* Subtle shine effect */}
-          <div className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12 animate-shine" />
-          
-          <h2 className="text-2xl font-bold text-[#4A90E2] mb-4">
-            A Special Surprise
-          </h2>
-          <p className="text-lg text-zinc-600 mb-8 leading-relaxed">
-            Something beautiful is blooming. Take your time, enjoy the vibes, and get ready for the next chapter.
+          <button className="text-pink-400 hover:text-pink-600 transition-colors">
+            <Search size={28} />
+          </button>
+          <button className="relative w-12 h-12 hover:scale-110 transition-transform flex items-center justify-center">
+            <img src="/stitch.png" alt="Menu" className="w-full h-full object-contain drop-shadow-sm" />
+          </button>
+        </motion.div>
+      </nav>
+
+      {/* Main Hero Section */}
+      <main className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-8 pb-24 flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-8">
+
+        {/* Hero Text Block */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left"
+        >
+          <span className="inline-block py-2 px-5 rounded-full bg-white/70 backdrop-blur-md border border-pink-200 text-pink-500 font-bold text-sm mb-6 shadow-sm">
+            💖 Our Story • April 19th, 2026 (and counting!) • ∞ Love
+          </span>
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-rose-400 to-[#FF1493] mb-6 leading-tight drop-shadow-sm" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}>
+            Aloha, My Dearest Senuri! 🌸
+          </h1>
+
+          <p className="text-lg sm:text-xl text-zinc-700 leading-relaxed mb-10 max-w-2xl bg-white/50 p-6 sm:p-8 rounded-[2rem] backdrop-blur-sm border border-white/60 shadow-[0_8px_32px_0_rgba(255,182,193,0.25)] font-medium">
+            Life is just so much brighter with you, my darling! You're the beautiful Angel to my Stitch, the sweet sparkle in my day, and the very best 'Ohana' I could ever ask for. This little digital paradise is all about us; the laughter, the adventures, and the endless love we share. Get ready for some major cuteness and surprises, crafted just for you, with all my love! 🥰
           </p>
-          
-          <div className="inline-block py-3 px-6 bg-pink-50 rounded-2xl border border-pink-100 text-pink-500 font-semibold shadow-inner">
-            Proposal Section Placeholder<br/>
-            <span className="text-sm font-normal text-pink-400">— Coming in Phase 2 —</span>
+
+          <div className="flex items-center gap-4 flex-wrap justify-center lg:justify-start">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 sm:px-10 sm:py-5 bg-gradient-to-r from-pink-500 to-[#FF1493] text-white font-bold rounded-full shadow-xl shadow-pink-500/30 hover:shadow-pink-500/50 transition-all flex items-center gap-2 text-lg tracking-wide"
+            >
+              BEGIN OUR ADVENTURE ✨
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 10 }}
+              whileTap={{ scale: 0.9 }}
+              className="w-16 h-16 bg-white text-pink-500 flex items-center justify-center rounded-full shadow-xl shadow-pink-200/50 border border-pink-100 hover:text-[#FF1493] hover:bg-pink-50 transition-colors"
+            >
+              <Heart size={32} fill="currentColor" />
+            </motion.button>
           </div>
         </motion.div>
-      </div>
+
+        {/* Hero Media Block */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.4, type: "spring", bounce: 0.4 }}
+          className="flex-1 w-full max-w-md lg:max-w-lg relative mt-8 lg:mt-0"
+        >
+          {/* Decorative floating doodles around the image */}
+          <motion.div
+            animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-10 -left-6 text-6xl z-20 drop-shadow-lg"
+          >
+            🌺
+          </motion.div>
+          <motion.div
+            animate={{ y: [0, 20, 0], rotate: [0, -10, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute -bottom-8 -right-4 text-7xl z-20 drop-shadow-lg"
+          >
+            💖
+          </motion.div>
+          <motion.div
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute top-1/2 -right-10 text-5xl z-20 drop-shadow-lg"
+          >
+            ✨
+          </motion.div>
+
+          {/* Main Image Frame */}
+          <div className="relative z-10 rounded-[3rem] p-4 bg-white/60 backdrop-blur-xl shadow-[0_20px_60px_rgba(255,105,180,0.25)] border-2 border-white overflow-hidden transform rotate-2 hover:rotate-0 transition-transform duration-500">
+            <div className="rounded-[2.5rem] overflow-hidden bg-white shadow-inner relative aspect-[4/5]">
+              <img
+                src="/heroo.png"
+                alt="Our Adventure"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-pink-500/20 to-transparent pointer-events-none mix-blend-overlay"></div>
+            </div>
+          </div>
+
+          {/* Soft background glow */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#4A90E2] to-[#FF1493] blur-[100px] opacity-20 -z-10 rounded-full scale-110"></div>
+        </motion.div>
+      </main>
+
+      {/* Scrapbook / Teaser Grid */}
+      <section className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-32">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-[#4A90E2] to-blue-400 drop-shadow-sm" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}
+        >
+          Sneak Peeks & Memories 📸
+        </motion.h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { title: "Our First Lilo Date? 🎬", icon: "🍿", desc: "Where it all started and the sparks flew!" },
+            { title: "Barbie Dream Adventures? 🎀", icon: "🌸", desc: "Pink outfits, big smiles, and perfect days." },
+            { title: "Stitch's Mischief 🐾", icon: "💙", desc: "The chaotic but lovable moments we share." }
+          ].map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              whileHover={{ y: -12, scale: 1.03 }}
+              className="bg-white/80 backdrop-blur-xl border-2 border-white rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_rgba(255,182,193,0.4)] transition-all cursor-pointer group flex flex-col h-full"
+            >
+              <div className="text-5xl mb-6 transform group-hover:scale-125 transition-transform origin-left duration-300 drop-shadow-sm">{item.icon}</div>
+              <h3 className="text-2xl font-bold text-pink-500 mb-4 group-hover:text-[#FF1493] transition-colors">{item.title}</h3>
+              <p className="text-zinc-600 font-medium text-lg leading-relaxed flex-1">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
