@@ -1,11 +1,21 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, Heart } from "lucide-react";
 import FloatingAccents from "./FloatingAccents";
 
 export default function LandingPage() {
+  const [daysSince, setDaysSince] = useState(0);
+
+  useEffect(() => {
+    const startDate = new Date('2026-04-19T00:00:00');
+    const today = new Date();
+    const diffTime = Math.abs(today.getTime() - startDate.getTime());
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    setDaysSince(diffDays);
+  }, []);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -139,7 +149,7 @@ export default function LandingPage() {
         </motion.div>
       </main>
 
-      {/* Scrapbook / Teaser Grid */}
+      {/* Love in Numbers Grid */}
       <section className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-32">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -147,14 +157,14 @@ export default function LandingPage() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-[#4A90E2] to-blue-400 drop-shadow-sm" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}
         >
-          Sneak Peeks & Memories 📸
+          Love in Numbers 💖
         </motion.h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { title: "Our First Lilo Date? 🎬", icon: "🍿", desc: "Where it all started and the sparks flew!" },
-            { title: "Barbie Dream Adventures? 🎀", icon: "🌸", desc: "Pink outfits, big smiles, and perfect days." },
-            { title: "Stitch's Mischief 🐾", icon: "💙", desc: "The chaotic but lovable moments we share." }
+            { title: "Days of Magic ✨", value: `${daysSince} Days`, icon: "🗓️", desc: "Since April 19th, 2026; every single day brighter than the last!" },
+            { title: "Dates Planned 🌺", value: "Infinite & Beyond", icon: "🗺️", desc: "From cozy movie nights to endless Barbie dream adventures." },
+            { title: "Smiles Shared 🥰", value: "Countless", icon: "💌", desc: "Every text, call, and silly moment making my world a better place." }
           ].map((item, index) => (
             <motion.div
               key={index}
@@ -163,11 +173,12 @@ export default function LandingPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               whileHover={{ y: -12, scale: 1.03 }}
-              className="bg-white/80 backdrop-blur-xl border-2 border-white rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_rgba(255,182,193,0.4)] transition-all cursor-pointer group flex flex-col h-full"
+              className="bg-white/80 backdrop-blur-xl border-2 border-white rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_50px_rgba(255,182,193,0.4)] transition-all cursor-pointer group flex flex-col h-full items-center text-center"
             >
-              <div className="text-5xl mb-6 transform group-hover:scale-125 transition-transform origin-left duration-300 drop-shadow-sm">{item.icon}</div>
-              <h3 className="text-2xl font-bold text-pink-500 mb-4 group-hover:text-[#FF1493] transition-colors">{item.title}</h3>
-              <p className="text-zinc-600 font-medium text-lg leading-relaxed flex-1">{item.desc}</p>
+              <div className="text-5xl mb-6 transform group-hover:scale-125 transition-transform origin-center duration-300 drop-shadow-sm">{item.icon}</div>
+              <h3 className="text-xl font-bold text-zinc-500 mb-2">{item.title}</h3>
+              <p className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-[#FF1493] mb-4 group-hover:scale-105 transition-transform">{item.value}</p>
+              <p className="text-zinc-600 font-medium text-base leading-relaxed flex-1">{item.desc}</p>
             </motion.div>
           ))}
         </div>
