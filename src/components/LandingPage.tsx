@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Search, Heart } from "lucide-react";
 import FloatingAccents from "./FloatingAccents";
+import BigQuestion from "./BigQuestion";
 
 export default function LandingPage() {
   const [daysSince, setDaysSince] = useState(0);
@@ -247,6 +248,8 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
+
+      <BigQuestion />
     </div>
   );
 }
