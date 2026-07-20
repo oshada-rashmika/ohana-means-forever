@@ -183,6 +183,70 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
+      {/* Romantic Notes Section */}
+      <section className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-32">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-4xl md:text-5xl font-extrabold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-[#FF1493] drop-shadow-sm" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}
+        >
+          My Heart to Yours 💌
+        </motion.h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-min">
+          {[
+            {
+              title: "The Little Things 🌸",
+              content: "I never knew I could pay so much attention to the little things until I met you. Learning your favorite colors, the treats that make you smile, and exactly how you like things; it's become my absolute favorite hobby. You're my favorite subject to study.",
+              rotation: -2
+            },
+            {
+              title: "Growing Together 🌱",
+              content: "I know I can be a little immature sometimes, and I'm so sorry for the times I've driven you crazy. But please know, I'm always trying to be better; for you, for us. Your patience and your gentle love are my greatest blessings in this life.",
+              rotation: 2
+            },
+            {
+              title: "My Promise to You 💫",
+              content: "I promise you this: I am going to work so incredibly hard. One day, I’m going to buy you the world and everything your beautiful heart desires. You deserve the absolute best, and I’m going to make sure you get it. You are my motivation.",
+              rotation: -1.5
+            },
+            {
+              title: "My Favorite Melody 🎶",
+              content: "There is no sound in this universe I love more than your voice. The moment I hear it, every worry I have just melts away. You are my peace, my calm in the chaos, and my absolute favorite comfort.",
+              rotation: 3
+            },
+            {
+              title: "My Rock 💖",
+              content: "I still can't believe how lucky I am to have someone who understands me the way you do. You support me, you believe in me even when I don't, and you hold my heart so gently. I am so deeply grateful to have you by my side.",
+              rotation: -3
+            },
+            {
+              title: "Your Biggest Fan 🥰",
+              content: "All I want in this life is to see you shine. I want you to be insanely happy, and so wildly successful in everything you pursue. Being by your side and cheering you on as you conquer the world is my greatest honor.",
+              rotation: 1.5
+            }
+          ].map((note, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 40, rotate: 0 }}
+              whileInView={{ opacity: 1, y: 0, rotate: note.rotation }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7, delay: index * 0.15, type: "spring", bounce: 0.4 }}
+              whileHover={{ scale: 1.05, rotate: 0, zIndex: 30 }}
+              className="bg-[#fff9fa] backdrop-blur-md border border-pink-100 p-8 shadow-[0_15px_35px_rgba(255,182,193,0.3)] hover:shadow-[0_25px_50px_rgba(255,20,147,0.3)] transition-all cursor-pointer flex flex-col justify-between relative"
+              style={{ borderRadius: "2px 25px 2px 25px" }}
+            >
+              {/* Cute tape piece on top */}
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-6 bg-pink-100/80 backdrop-blur-sm border border-pink-200/50 transform -rotate-2 shadow-sm"></div>
+
+              <h3 className="text-xl font-bold text-[#FF1493] mb-4 mt-2 font-serif">{note.title}</h3>
+              <p className="text-zinc-700 leading-relaxed font-medium text-base italic">"{note.content}"</p>
+              <div className="text-right mt-6 text-2xl opacity-60">✨</div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
