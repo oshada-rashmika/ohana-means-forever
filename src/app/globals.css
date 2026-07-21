@@ -24,3 +24,10 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* Custom Cursor for non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
