@@ -4,55 +4,18 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toPng } from "html-to-image";
 import confetti from "canvas-confetti";
-import { CheckCircle2, ArrowLeft, Sparkles, Heart } from "lucide-react";
+import { CheckCircle2, ArrowLeft, Sparkles, Heart, Gift, Copy, Check } from "lucide-react";
 
 type Step = "question" | "sad" | "heartbroken" | "accepted" | "nextStep";
-
-interface Coupon {
-  emoji: string;
-  title: string;
-  description: string;
-}
-
-const coupons: Coupon[] = [
-  {
-    emoji: "🎟️",
-    title: "Unlimited Kisses & Hugs",
-    description: "Redeemable anytime, anywhere. No expiration date ever!"
-  },
-  {
-    emoji: "🍿",
-    title: "Movie & Snack Choice",
-    description: "You pick whatever movie we watch, and Oshada buys all your favorite treats."
-  },
-  {
-    emoji: "🍕",
-    title: "Late Night Craving Pass",
-    description: "Whatever food you crave, Oshada will fetch or order it for you."
-  },
-  {
-    emoji: "🚗",
-    title: "Spontaneous Adventure",
-    description: "A day filled with your favorite spots, music, and zero worries."
-  },
-  {
-    emoji: "👑",
-    title: "Princess Treatment Day",
-    description: "Full day of pure pampering, endless compliments, and royal care."
-  },
-  {
-    emoji: "💌",
-    title: "One Free Wish",
-    description: "Anything your heart desires, no questions asked!"
-  }
-];
 
 export default function BigQuestion() {
   const [step, setStep] = useState<Step>("question");
   const [isDownloading, setIsDownloading] = useState(false);
-  const [claimedCoupons, setClaimedCoupons] = useState<number[]>([]);
+  const [isCouponUnlocked, setIsCouponUnlocked] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
 
   const agreementRef = useRef<HTMLDivElement>(null);
+  const secretCode = "OHANA-MYSTERY-2026";
 
   const todayDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
@@ -60,17 +23,21 @@ export default function BigQuestion() {
     day: 'numeric'
   });
 
-  const toggleCoupon = (index: number) => {
-    if (claimedCoupons.includes(index)) {
-      setClaimedCoupons(claimedCoupons.filter(i => i !== index));
-    } else {
-      setClaimedCoupons([...claimedCoupons, index]);
+  const toggleCoupon = () => {
+    if (!isCouponUnlocked) {
+      setIsCouponUnlocked(true);
       confetti({
-        particleCount: 50,
-        spread: 60,
-        origin: { y: 0.7 }
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 }
       });
     }
+  };
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(secretCode);
+    setCopiedCode(true);
+    setTimeout(() => setCopiedCode(false), 2000);
   };
 
   const fireConfetti = () => {
@@ -109,8 +76,8 @@ export default function BigQuestion() {
     const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
     if (!accessKey) return;
 
-    const message = answer === "YES"
-      ? "She said YES! 🌺 Get ready for a lifetime of Ohana!"
+    const message = answer === "YES" 
+      ? "She said YES! 🌺 Get ready for a lifetime of Ohana!" 
       : "She double-confirmed NO... 💔 The Stitch is heartbroken.";
 
     try {
@@ -143,7 +110,7 @@ export default function BigQuestion() {
       >
         <AnimatePresence mode="wait">
           {step === "question" && (
-            <motion.div
+            <motion.div 
               key="question"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -191,7 +158,7 @@ export default function BigQuestion() {
           )}
 
           {step === "sad" && (
-            <motion.div
+            <motion.div 
               key="sad"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -205,7 +172,7 @@ export default function BigQuestion() {
                   <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay pointer-events-none"></div>
                 </div>
               </div>
-
+              
               {/* Right Side: The Sad Question */}
               <div className="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left space-y-6">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#4A90E2] leading-tight" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}>
@@ -214,9 +181,9 @@ export default function BigQuestion() {
                 <p className="text-lg sm:text-xl text-zinc-600 font-medium leading-relaxed">
                   But... 'Ohana means family. And family means nobody gets left behind or forgotten. My heart feels so broken. Are you really, really sure you want to say no to your Stitch? 💔
                 </p>
-
+                
                 <div className="flex flex-col sm:flex-row items-center gap-4 mt-8 relative w-full justify-center md:justify-start">
-                  <button
+                  <button 
                     onClick={() => {
                       setStep("heartbroken");
                       sendNotification("NO");
@@ -225,8 +192,8 @@ export default function BigQuestion() {
                   >
                     Yes, I'm sure.
                   </button>
-
-                  <button
+                  
+                  <button 
                     onClick={() => setStep("question")}
                     className="w-full sm:w-auto px-8 py-4 bg-linear-to-r from-[#4A90E2] to-blue-500 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-blue-500/50 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                   >
@@ -238,7 +205,7 @@ export default function BigQuestion() {
           )}
 
           {step === "heartbroken" && (
-            <motion.div
+            <motion.div 
               key="heartbroken"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -248,7 +215,7 @@ export default function BigQuestion() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-zinc-300 max-w-sm w-full">
                 <img src="/okay.gif" alt="Heartbroken Stitch" className="w-full h-auto object-cover grayscale opacity-80" />
               </div>
-
+              
               <div className="max-w-2xl">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-zinc-500 leading-tight mb-4" style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}>
                   Okay... I understand. 🌧️
@@ -256,7 +223,7 @@ export default function BigQuestion() {
                 <p className="text-lg sm:text-xl text-zinc-500 font-medium leading-relaxed">
                   I guess some 'Ohanas just aren't meant to be. Stitch will just be alone... in the rain... with a broken heart. Goodbye, my Angel. 🥀
                 </p>
-                <button
+                <button 
                   onClick={() => setStep("question")}
                   className="mt-10 px-8 py-4 bg-zinc-100 text-zinc-500 font-bold text-lg rounded-full border border-zinc-200 shadow-sm hover:bg-pink-50 hover:text-pink-500 hover:border-pink-200 transition-all cursor-pointer"
                 >
@@ -374,66 +341,90 @@ export default function BigQuestion() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
               transition={{ duration: 0.6 }}
-              className="flex flex-col items-center w-full max-w-4xl mx-auto"
+              className="flex flex-col items-center w-full max-w-2xl mx-auto"
             >
               {/* Header */}
-              <div className="text-center mb-8 sm:mb-12">
+              <div className="text-center mb-8 sm:mb-10">
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   className="inline-block px-4 py-1.5 rounded-full bg-pink-100/80 border border-pink-200 text-[#FF1493] font-bold text-xs sm:text-sm mb-4 shadow-sm"
                 >
-                  Step 2 • The Next Chapter 🌺✨
+                  Step 2 • Mystery Gift 🎁✨
                 </motion.span>
                 <h2
                   className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-pink-500 via-rose-500 to-[#FF1493] mb-4 drop-shadow-sm"
                   style={{ fontFamily: "Georgia, 'Times New Roman', Times, serif" }}
                 >
-                  Our Future Begins Now! 🚀💖
+                  Your Secret Mystery Coupon! 💖
                 </h2>
-                <p className="text-zinc-600 font-medium text-base sm:text-lg max-w-2xl mx-auto px-2">
-                  Now that our love agreement is signed and sealed, here are your official <span className="text-[#FF1493] font-bold">Ohana Love Coupons</span>! Tap any card below to redeem it whenever you like! 🌸
+                <p className="text-zinc-600 font-medium text-base sm:text-lg max-w-xl mx-auto px-2">
+                  Now that our agreement is official, tap the coupon below to reveal your secret mystery gift code! 🎁
                 </p>
               </div>
 
-              {/* Coupons Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 w-full mb-10 sm:mb-12">
-                {coupons.map((coupon, idx) => {
-                  const isClaimed = claimedCoupons.includes(idx);
-                  return (
-                    <motion.div
-                      key={idx}
-                      whileHover={{ y: -6, scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => toggleCoupon(idx)}
-                      className={`relative p-6 rounded-3xl border-2 transition-all cursor-pointer flex flex-col justify-between select-none ${isClaimed
-                          ? "bg-linear-to-br from-pink-500 to-[#FF1493] text-white border-pink-400 shadow-xl shadow-pink-500/30"
-                          : "bg-white/80 backdrop-blur-md border-pink-100 text-zinc-800 hover:shadow-xl hover:border-pink-300"
-                        }`}
-                    >
-                      <div>
-                        <div className="text-4xl mb-3 drop-shadow-sm">{coupon.emoji}</div>
-                        <h3 className={`font-bold text-lg mb-2 ${isClaimed ? "text-white" : "text-zinc-800"}`}>
-                          {coupon.title}
-                        </h3>
-                        <p className={`text-sm leading-relaxed ${isClaimed ? "text-pink-100" : "text-zinc-600"}`}>
-                          {coupon.description}
-                        </p>
-                      </div>
-                      <div className="mt-6 pt-4 border-t border-pink-200/40 flex items-center justify-between text-xs font-bold uppercase tracking-wider">
-                        <span>{isClaimed ? "Redeemed 🎉" : "Tap to Claim 🎟️"}</span>
-                        {isClaimed ? (
-                          <CheckCircle2 className="w-5 h-5 text-white" />
-                        ) : (
-                          <Sparkles className="w-4 h-4 text-pink-400" />
-                        )}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
+              {/* Single Mystery Gift Coupon Card */}
+              <motion.div
+                whileHover={{ y: -6, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={toggleCoupon}
+                className={`relative w-full p-6 sm:p-8 rounded-3xl border-3 transition-all cursor-pointer select-none text-center mb-8 shadow-xl ${
+                  isCouponUnlocked
+                    ? "bg-gradient-to-br from-pink-500 via-rose-500 to-[#FF1493] text-white border-pink-300 shadow-pink-500/40"
+                    : "bg-white/90 backdrop-blur-xl border-pink-200 text-zinc-800 hover:border-pink-400 hover:shadow-pink-300/30"
+                }`}
+              >
+                <div className="text-5xl sm:text-6xl mb-4 drop-shadow-md">🎁</div>
+                <h3 className={`text-2xl sm:text-3xl font-extrabold mb-2 ${isCouponUnlocked ? "text-white" : "text-[#FF1493]"}`}>
+                  Exclusive Mystery Gift Coupon
+                </h3>
+                <p className={`text-sm sm:text-base mb-6 font-medium ${isCouponUnlocked ? "text-pink-100" : "text-zinc-600"}`}>
+                  {isCouponUnlocked
+                    ? "Your secret gift code has been unlocked! 🎉"
+                    : "Tap to reveal your secret mystery code!"}
+                </p>
 
-              {/* Special Note Card */}
+                {/* Unlocked Secret Code Section */}
+                {isCouponUnlocked ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex flex-col items-center gap-4 bg-white/20 backdrop-blur-md p-5 rounded-2xl border border-white/40 shadow-inner"
+                  >
+                    <div className="text-xs uppercase font-bold tracking-widest text-pink-100">
+                      Your Secret Gift Code:
+                    </div>
+                    
+                    <div className="bg-white text-[#FF1493] font-mono font-extrabold text-xl sm:text-2xl px-6 py-3 rounded-xl shadow-md border-2 border-pink-200 tracking-wider flex items-center gap-3">
+                      <span>{secretCode}</span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCopyCode();
+                        }}
+                        className="p-2 bg-pink-50 hover:bg-pink-100 text-pink-600 rounded-lg transition-colors cursor-pointer"
+                        title="Copy code"
+                      >
+                        {copiedCode ? <Check size={18} className="text-green-600" /> : <Copy size={18} />}
+                      </button>
+                    </div>
+
+                    {/* Instagram Notice */}
+                    <div className="mt-2 bg-white/90 text-zinc-800 p-4 rounded-xl shadow-md border border-pink-200 flex items-center justify-center gap-3 text-sm sm:text-base font-semibold">
+                      <svg className="w-6 h-6 text-pink-600 shrink-0 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                      </svg>
+                      <span>Send this code to <strong>Oshada</strong> on Instagram to redeem your mystery gift! 📲✨</span>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-pink-50 border border-pink-200 text-pink-600 font-bold text-sm shadow-sm">
+                    <Sparkles size={16} /> Tap to Unlock Code 🎟️
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Special Promise Note Card */}
               <div className="w-full bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-pink-200 shadow-md text-center mb-8 sm:mb-10">
                 <div className="text-3xl mb-2">🥰</div>
                 <h3 className="text-2xl font-bold text-[#FF1493] mb-3 font-serif">
@@ -466,4 +457,5 @@ export default function BigQuestion() {
     </section>
   );
 }
+
 
